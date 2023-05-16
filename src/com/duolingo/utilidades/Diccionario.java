@@ -1,7 +1,10 @@
+package com.duolingo.utilidades;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Diccionario {
     private Map<Character, Set<String>> palabrasPorInicial;
@@ -40,4 +43,38 @@ public class Diccionario {
         palabra = palabra.toLowerCase(); // Convertir a minúsculas
         return palabra;
     }
+
+
+    public boolean eliminarPalabra(String palabra) {
+        String palabraSanitizada = sanitizarPalabra(palabra);
+        char inicial = palabraSanitizada.charAt(0);
+        Set<String> palabrasIniciales = palabrasPorInicial.getOrDefault(inicial, new HashSet<>());
+        if (palabrasIniciales.remove(palabraSanitizada)) {
+            if (palabrasIniciales.isEmpty()) {
+                palabrasPorInicial.remove(inicial);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean existePalabra(String palabra) {
+        String palabraSanitizada = sanitizarPalabra(palabra);
+        char inicial = palabraSanitizada.charAt(0);
+        Set<String> palabrasIniciales = palabrasPorInicial.getOrDefault(inicial, new HashSet<>());
+        return palabrasIniciales.contains(palabraSanitizada);
+    }
+
+    public Set<Character> getInicialesDisponibles() {
+        return palabrasPorInicial.keySet();
+    }
+    
+
+    public List<String> getPalabrasPorInicial(char inicial) {
+        Set<String> palabrasIniciales = palabrasPorInicial.getOrDefault(inicial, new HashSet<>());
+        return new ArrayList<>(palabrasIniciales);
+    }
+    
+    
+    
 }
